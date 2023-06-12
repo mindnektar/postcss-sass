@@ -491,6 +491,9 @@ class SassParser {
                 case 'ident':
                     atrule.params = contentNode.content
                     break
+                case 'space':
+                    atrule.raws.between += contentNode.content
+                    break
                 default:
             }
         })
