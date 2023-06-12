@@ -474,7 +474,8 @@ class SassParser {
         let atrule = postcss.atRule()
         atrule.raws = {
             before: this.raws.before || DEFAULT_RAWS_RULE.before,
-            between: DEFAULT_RAWS_RULE.between
+            afterName: '',
+            after: ''
         }
         atrule.source = {
             start: {
@@ -486,14 +487,20 @@ class SassParser {
         }
         atrule.name = 'include'
         atrule.parent = parent
-        node.content.forEach(contentNode => {
+        node.content.forEach((contentNode, i) => {
             switch (contentNode.type) {
                 case 'ident':
                     atrule.params = contentNode.content
                     break
-                case 'space':
-                    atrule.raws.between += contentNode.content
+                case 'space': {
+                    let prevNodeType = node.content[i - 1].type
+                    if (prevNodeType === 'atkeyword') {
+                        atrule.raws.afterName = contentNode.content
+                    } else {
+                        atrule.raws.after = contentNode.content
+                    }
                     break
+                }
                 default:
             }
         })
