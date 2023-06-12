@@ -225,16 +225,6 @@ class SassParser {
                             this.process(contentNode.content[0], parent)
                             break
                         }
-                        case 'variable': {
-                            declarationNode.value = '$'
-                            this.process(contentNode, declarationNode)
-                            break
-                        }
-                        case 'color': {
-                            declarationNode.value = '#'
-                            this.process(contentNode, declarationNode)
-                            break
-                        }
                         case 'number': {
                             if (contentNode.content.length > 1) {
                                 declarationNode.value = contentNode.content.join(
@@ -328,6 +318,14 @@ class SassParser {
                     }
                     case 'percentage': {
                         parent.value += contentNode.content.join('') + '%'
+                        break
+                    }
+                    case 'color': {
+                        parent.value += `#${contentNode.content}`
+                        break
+                    }
+                    case 'variable': {
+                        parent.value += `$${contentNode.content}`
                         break
                     }
                     default: {
@@ -460,6 +458,25 @@ class SassParser {
                 return
             }
             this.process(contentNode, atrule)
+        })
+        parent.nodes.push(atrule)
+    }
+
+    include (node, parent) {
+        let atrule = postcss.atRule()
+        atrule.raws = {
+            before: this.raws.before || DEFAULT_RAWS_RULE.before,
+            between: DEFAULT_RAWS_RULE.between
+        }
+        atrule.name = 'include'
+        atrule.parent = parent
+        node.content.forEach(contentNode => {
+            switch (contentNode.type) {
+                case 'ident':
+                    atrule.params = contentNode.content
+                    break
+                default:
+            }
         })
         parent.nodes.push(atrule)
     }
