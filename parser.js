@@ -468,6 +468,14 @@ class SassParser {
             before: this.raws.before || DEFAULT_RAWS_RULE.before,
             between: DEFAULT_RAWS_RULE.between
         }
+        atrule.source = {
+            start: {
+                line: node.start.line,
+                column: node.start.column
+            },
+            end: node.end,
+            input: this.input
+        }
         atrule.name = 'include'
         atrule.parent = parent
         node.content.forEach(contentNode => {
