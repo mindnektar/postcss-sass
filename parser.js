@@ -445,6 +445,14 @@ class SassParser {
             before: this.raws.before || DEFAULT_RAWS_RULE.before,
             between: DEFAULT_RAWS_RULE.between
         }
+        atrule.source = {
+            start: {
+                line: node.start.line,
+                column: node.start.column
+            },
+            end: node.end,
+            input: this.input
+        }
         node.content.forEach((contentNode, i) => {
             if (contentNode.type === 'space') {
                 let prevNodeType = node.content[i - 1].type

@@ -3061,7 +3061,17 @@ exports[`parses media.sass 1`] = `
               }
             }
           ],
-          \\"selector\\": \\"@media (max-width: 800px)\\"
+          \\"selector\\": \\"@media (max-width: 800px)\\",
+          \\"source\\": {
+            \\"start\\": {
+              \\"line\\": 4,
+              \\"column\\": 3
+            },
+            \\"end\\": {
+              \\"line\\": 5,
+              \\"column\\": 13
+            }
+          }
         }
       ],
       \\"selector\\": \\".test\\",
@@ -3125,7 +3135,17 @@ exports[`parses media2.sass 1`] = `
           }
         }
       ],
-      \\"selector\\": \\"@media screen and (min-width: 1024px)\\"
+      \\"selector\\": \\"@media screen and (min-width: 1024px)\\",
+      \\"source\\": {
+        \\"start\\": {
+          \\"line\\": 1,
+          \\"column\\": 1
+        },
+        \\"end\\": {
+          \\"line\\": 2,
+          \\"column\\": 31
+        }
+      }
     },
     {
       \\"raws\\": {
@@ -3202,7 +3222,17 @@ exports[`parses media2.sass 1`] = `
               }
             }
           ],
-          \\"selector\\": \\"@media screen and (max-width: 320px)\\"
+          \\"selector\\": \\"@media screen and (max-width: 320px)\\",
+          \\"source\\": {
+            \\"start\\": {
+              \\"line\\": 7,
+              \\"column\\": 3
+            },
+            \\"end\\": {
+              \\"line\\": 8,
+              \\"column\\": 17
+            }
+          }
         },
         {
           \\"raws\\": {
@@ -3232,7 +3262,17 @@ exports[`parses media2.sass 1`] = `
               }
             }
           ],
-          \\"selector\\": \\"@media screen and (min-width: 1200px)\\"
+          \\"selector\\": \\"@media screen and (min-width: 1200px)\\",
+          \\"source\\": {
+            \\"start\\": {
+              \\"line\\": 10,
+              \\"column\\": 3
+            },
+            \\"end\\": {
+              \\"line\\": 11,
+              \\"column\\": 15
+            }
+          }
         }
       ],
       \\"selector\\": \\".profile-pic\\",
@@ -3316,7 +3356,17 @@ exports[`parses media3.sass 1`] = `
           }
         }
       ],
-      \\"selector\\": \\"@media #{$information-phone}\\"
+      \\"selector\\": \\"@media #{$information-phone}\\",
+      \\"source\\": {
+        \\"start\\": {
+          \\"line\\": 3,
+          \\"column\\": 1
+        },
+        \\"end\\": {
+          \\"line\\": 4,
+          \\"column\\": 18
+        }
+      }
     },
     {
       \\"raws\\": {
@@ -3386,7 +3436,17 @@ exports[`parses media3.sass 1`] = `
           }
         }
       ],
-      \\"selector\\": \\"@media screen and ($width-name : $target-width)\\"
+      \\"selector\\": \\"@media screen and ($width-name : $target-width)\\",
+      \\"source\\": {
+        \\"start\\": {
+          \\"line\\": 9,
+          \\"column\\": 1
+        },
+        \\"end\\": {
+          \\"line\\": 10,
+          \\"column\\": 17
+        }
+      }
     }
   ],
   \\"source\\": {
