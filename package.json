@@ -1,6 +1,6 @@
 {
   "name": "postcss-sass",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "A Sass parser for PostCSS, using gonzales-pe.",
   "keywords": [
     "postcss",
@@ -9,13 +9,13 @@
     "postcss-sass",
     "sass"
   ],
-  "author": "Oleh Aloshkin <olegaleshkin@gmail.com>",
+  "author": "Martin Denk <wyverns.spirit@gmail.com>",
   "license": "MIT",
-  "repository": "AleshaOleg/postcss-sass",
+  "repository": "mindnektar/postcss-sass",
   "bugs": {
-    "url": "https://github.com/AleshaOleg/postcss-sass/issues"
+    "url": "https://github.com/mindnektar/postcss-sass/issues"
   },
-  "homepage": "https://github.com/AleshaOleg/postcss-sass",
+  "homepage": "https://github.com/mindnektar/postcss-sass",
   "dependencies": {
     "gonzales-pe": "^4.3.0",
     "postcss": "^8.3.7"
