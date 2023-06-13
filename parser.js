@@ -500,8 +500,11 @@ class SassParser {
         let index = node.content[1].type === 'space' ? 2 : 1
 
         atrule.params = appendContents(node.content.slice(index)).trim(/\s/)
-        console.log(node.content)
         parent.nodes.push(atrule)
+    }
+
+    mixin (node, parent) {
+        this.atrule(node, parent)
     }
 
     include (node, parent) {
