@@ -1,3 +1,4 @@
+/* eslint-disable multiline-ternary */
 const postcss = require('postcss')
 const gonzales = require('gonzales-pe')
 
@@ -20,7 +21,7 @@ const DEFAULT_COMMENT_DECL = {
     before: ''
 }
 
-const SUPPORTED_AT_KEYWORDS = ['media']
+const SUPPORTED_AT_KEYWORDS = ['media', 'function']
 
 class SassParser {
     constructor (input) {
@@ -439,35 +440,76 @@ class SassParser {
         )
         if (!supportedNode) return
 
-        let atrule = postcss.rule()
-        atrule.selector = ''
-        atrule.raws = {
-            before: this.raws.before || DEFAULT_RAWS_RULE.before,
-            between: DEFAULT_RAWS_RULE.between
-        }
-        atrule.source = {
-            start: {
-                line: node.start.line,
-                column: node.start.column
-            },
-            end: node.end,
-            input: this.input
-        }
-        node.content.forEach((contentNode, i) => {
-            if (contentNode.type === 'space') {
-                let prevNodeType = node.content[i - 1].type
-                switch (prevNodeType) {
-                    case 'atkeyword':
-                    case 'ident':
-                        atrule.selector += contentNode.content
-                        break
-                    default:
-                }
-                return
+        let keyword = node.content.find(({ type }) => type === 'atkeyword')
+
+        if (keyword.content[0].content === 'function') {
+            let atrule = postcss.atRule()
+            atrule.name = 'function'
+            atrule.raws = {
+                before: this.raws.before || DEFAULT_RAWS_RULE.before,
+                between: DEFAULT_RAWS_RULE.between,
+                afterName: ' '
             }
-            this.process(contentNode, atrule)
-        })
-        parent.nodes.push(atrule)
+            atrule.source = {
+                start: {
+                    line: node.start.line,
+                    column: node.start.column
+                },
+                end: node.end,
+                input: this.input
+            }
+
+            let appendContents = content =>
+                content.reduce((result, current) => {
+                    let next =
+                        typeof current.content === 'string'
+                            ? current.content
+                            : appendContents(current.content)
+
+                    return `${result}${next}`
+                })
+
+            let functionIndex = node.content.findIndex(
+                ({ type }) => type === 'function'
+            )
+
+            atrule.params = appendContents(
+                node.content.slice(functionIndex)
+            ).trim(/\s/)
+
+            parent.nodes.push(atrule)
+        } else {
+            let atrule = postcss.rule()
+            atrule.selector = ''
+            atrule.raws = {
+                before: this.raws.before || DEFAULT_RAWS_RULE.before,
+                between: DEFAULT_RAWS_RULE.between
+            }
+            atrule.source = {
+                start: {
+                    line: node.start.line,
+                    column: node.start.column
+                },
+                end: node.end,
+                input: this.input
+            }
+            node.content.forEach((contentNode, i) => {
+                if (contentNode.type === 'space') {
+                    let prevNodeType = node.content[i - 1].type
+                    switch (prevNodeType) {
+                        case 'atkeyword':
+                        case 'ident':
+                            atrule.selector += contentNode.content
+                            break
+                        default:
+                    }
+                    return
+                }
+                this.process(contentNode, atrule)
+            })
+
+            parent.nodes.push(atrule)
+        }
     }
 
     include (node, parent) {
