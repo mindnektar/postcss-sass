@@ -1418,7 +1418,8 @@ exports[`parses import.sass 1`] = `
       \\"raws\\": {
         \\"before\\": \\"\\",
         \\"between\\": \\"\\",
-        \\"afterName\\": \\" \\"
+        \\"afterName\\": \\" \\",
+        \\"after\\": \\"\\"
       },
       \\"type\\": \\"atrule\\",
       \\"name\\": \\"import\\",

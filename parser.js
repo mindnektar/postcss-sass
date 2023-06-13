@@ -470,13 +470,25 @@ class SassParser {
             return
         }
 
+        let block = [...node.content]
+            .reverse()
+            .find(({ type }) => type === 'block')
+        let declarationDelimiter = {}
+
+        if (block) {
+            declarationDelimiter = [...block.content]
+                .reverse()
+                .find(({ type }) => type === 'declarationDelimiter')
+        }
+
         let atrule = postcss.atRule()
         atrule.name = name
         atrule.parent = parent
         atrule.raws = {
             before: this.raws.before || DEFAULT_RAWS_RULE.before,
             between: DEFAULT_RAWS_RULE.between,
-            afterName: ' '
+            afterName: ' ',
+            after: declarationDelimiter.content || ''
         }
         atrule.source = {
             start: {
