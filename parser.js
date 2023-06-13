@@ -21,8 +21,6 @@ const DEFAULT_COMMENT_DECL = {
     before: ''
 }
 
-const SUPPORTED_AT_KEYWORDS = ['media', 'function']
-
 class SassParser {
     constructor (input) {
         this.input = input
@@ -434,53 +432,13 @@ class SassParser {
     }
 
     atrule (node, parent) {
-        // Skip unsupported @xxx rules
-        let supportedNode = node.content[0].content.some(contentNode =>
-            SUPPORTED_AT_KEYWORDS.includes(contentNode.content)
-        )
-        if (!supportedNode) return
-
         let keyword = node.content.find(({ type }) => type === 'atkeyword')
+        let name = keyword.content[0].content
 
-        if (keyword.content[0].content === 'function') {
-            let atrule = postcss.atRule()
-            atrule.name = 'function'
-            atrule.raws = {
-                before: this.raws.before || DEFAULT_RAWS_RULE.before,
-                between: DEFAULT_RAWS_RULE.between,
-                afterName: ' '
-            }
-            atrule.source = {
-                start: {
-                    line: node.start.line,
-                    column: node.start.column
-                },
-                end: node.end,
-                input: this.input
-            }
-
-            let appendContents = content =>
-                content.reduce((result, current) => {
-                    let next =
-                        typeof current.content === 'string'
-                            ? current.content
-                            : appendContents(current.content)
-
-                    return `${result}${next}`
-                })
-
-            let functionIndex = node.content.findIndex(
-                ({ type }) => type === 'function'
-            )
-
-            atrule.params = appendContents(
-                node.content.slice(functionIndex)
-            ).trim(/\s/)
-
-            parent.nodes.push(atrule)
-        } else {
+        if (name === 'media') {
             let atrule = postcss.rule()
             atrule.selector = ''
+            atrule.parent = parent
             atrule.raws = {
                 before: this.raws.before || DEFAULT_RAWS_RULE.before,
                 between: DEFAULT_RAWS_RULE.between
@@ -509,7 +467,41 @@ class SassParser {
             })
 
             parent.nodes.push(atrule)
+            return
         }
+
+        let atrule = postcss.atRule()
+        atrule.name = name
+        atrule.parent = parent
+        atrule.raws = {
+            before: this.raws.before || DEFAULT_RAWS_RULE.before,
+            between: DEFAULT_RAWS_RULE.between,
+            afterName: ' '
+        }
+        atrule.source = {
+            start: {
+                line: node.start.line,
+                column: node.start.column
+            },
+            end: node.end,
+            input: this.input
+        }
+
+        let appendContents = content =>
+            content.reduce((result, current) => {
+                let next =
+                    typeof current.content === 'string'
+                        ? current.content
+                        : appendContents(current.content)
+
+                return `${result}${next}`
+            }, '')
+
+        let index = node.content[1].type === 'space' ? 2 : 1
+
+        atrule.params = appendContents(node.content.slice(index)).trim(/\s/)
+        console.log(node.content)
+        parent.nodes.push(atrule)
     }
 
     include (node, parent) {
