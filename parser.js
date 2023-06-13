@@ -476,9 +476,10 @@ class SassParser {
         let declarationDelimiter = {}
 
         if (block) {
-            declarationDelimiter = [...block.content]
-                .reverse()
-                .find(({ type }) => type === 'declarationDelimiter')
+            declarationDelimiter =
+                [...block.content]
+                    .reverse()
+                    .find(({ type }) => type === 'declarationDelimiter') || {}
         }
 
         let atrule = postcss.atRule()
