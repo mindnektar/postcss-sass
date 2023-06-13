@@ -470,6 +470,7 @@ class SassParser {
             return
         }
 
+        let afterName = node.content.find(({ type }) => type === 'space')
         let block = [...node.content]
             .reverse()
             .find(({ type }) => type === 'block')
@@ -488,7 +489,7 @@ class SassParser {
         atrule.raws = {
             before: this.raws.before || DEFAULT_RAWS_RULE.before,
             between: DEFAULT_RAWS_RULE.between,
-            afterName: ' ',
+            afterName: afterName ? afterName.content : '',
             after: declarationDelimiter.content || ''
         }
         atrule.source = {
